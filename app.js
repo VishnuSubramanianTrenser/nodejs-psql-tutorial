@@ -3,9 +3,6 @@ const express = require('express');
 const morgan = require('morgan');
 const AppError = require('./utils/appError');
 
-// Importing user router
-const userRouter = require('./routers/apiRouter');
-
 // Set-Up Express & its middleware
 const app = express();
 app.use(express.json());
@@ -14,6 +11,9 @@ app.use(express.json());
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 };
+
+// Importing user router
+const userRouter = require('./routers/apiRouter');
 
 // Mount routes
 app.use('/api', userRouter);

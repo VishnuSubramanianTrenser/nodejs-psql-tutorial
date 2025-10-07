@@ -19,6 +19,7 @@ const User = new EntitySchema({
   }
 });
 
+// Creating DB connection
 const AppDataSource = new DataSource({
   type: 'postgres',
   host: process.env.PGHOST,
@@ -32,13 +33,13 @@ const AppDataSource = new DataSource({
 });
 
 AppDataSource.initialize()
-  .then(() => console.log('✅ Database connected'))
-  .catch((err) => console.error('❌ Database connection error:', err));
+  .then(() => console.log('✅ Database connected via TypeORM'))
+  .catch((err) => console.error('❌ Database connection error in TypeORM :', err));
 
 // Then use repository pattern:
 const userRepo = AppDataSource.getRepository('User');
 
-// Fetch all users API
+// Get all users API
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await userRepo.find();
@@ -49,6 +50,19 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
+// Get user by ID API
+exports.getUser = async (req, res) => {
+  try {
+    const userID = req.params.id;
+    const user = await userRepo.findOneBy({id: userID});
+    res.status(200).json({ status: 'success', data: user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ status: 'error', message: err.message });
+  }
+};
+
+// Create user API
 exports.createUsers = async (req, res) => {
   try {
     const { name, address, contact, occupation } = req.body;
@@ -66,6 +80,7 @@ exports.createUsers = async (req, res) => {
   }
 };
 
+// Update user API
 exports.updateUsers = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -93,6 +108,7 @@ exports.updateUsers = async (req, res) => {
   }
 };
 
+// Delete user API
 exports.deleteUsers = async (req, res) => {
   try {
     const userId = req.params.id;

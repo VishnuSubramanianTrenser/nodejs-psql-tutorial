@@ -15,7 +15,7 @@ const pool = new Pool({
 
 // Test the connection
 pool.connect()
-  .then(() => console.log("✅ Connected to PostgreSQL"))
+  .then(() => console.log("✅ Database connected via PostgreSQL-PG Library"))
   .catch(err => console.error("❌ Connection error", err.stack));
 
 module.exports = pool;

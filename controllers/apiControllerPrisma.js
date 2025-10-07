@@ -3,8 +3,9 @@ const { PrismaClient } = require('./../generated/prisma');
 
 // creating a PRISMA client
 const prisma = new PrismaClient();
+console.log('✅ Database connected via PRISMA ORM')
 
-// Fetch all Users API
+// Get all Users API
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await prisma.user.findMany();
@@ -15,6 +16,21 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
+// Get user by ID API
+exports.getUser = async (req, res) => {
+  try {
+    const userID = req.params.id * 1;
+    const user = await prisma.user.findUnique({
+      where: {id: userID},
+    });
+    res.status(200).json({ status: 'success', data: user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ status: 'error', message: err.message });
+  }
+};
+
+// Create user API
 exports.createUsers = async (req, res) => {
   try {
     const { name, address, contact, occupation } = req.body;
@@ -34,6 +50,7 @@ exports.createUsers = async (req, res) => {
   }
 };
 
+// Update user API
 exports.updateUsers = async (req, res) => {
   try {
 
@@ -57,6 +74,7 @@ exports.updateUsers = async (req, res) => {
   }
 };
 
+// Delete user API
 exports.deleteUsers = async (req, res) => {
   try {
 

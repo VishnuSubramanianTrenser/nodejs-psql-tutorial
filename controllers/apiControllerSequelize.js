@@ -7,6 +7,8 @@ const sequelize = new Sequelize(process.env.PGDATABASE, process.env.PGUSER, proc
   dialect: process.env.PGUSER,
 });
 
+console.log("✅ Database connected via Sequelize ORM");
+
 // Define a User model
 const User = sequelize.define('User', {
   id: {
@@ -35,7 +37,7 @@ const User = sequelize.define('User', {
   timestamps: false
 });
 
-// Fetch all users API
+// Get all users API
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll();
@@ -46,6 +48,19 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
+// Get user by ID API
+exports.getUser = async (req, res) => {
+  try {
+    const userID = req.params.id;
+    const user = await User.findByPk(userID);
+    res.status(200).json({ status: 'success', data: user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ status: 'error', message: err.message });
+  }
+};
+
+// Create user API
 exports.createUsers = async (req, res) => {
   try {
     const {name, address, contact, occupation} = req.body;
@@ -62,6 +77,7 @@ exports.createUsers = async (req, res) => {
   }
 };
 
+// Update user API
 exports.updateUsers = async (req, res) => {
   try {
     const userID = req.params.id;
@@ -84,6 +100,7 @@ exports.updateUsers = async (req, res) => {
   }
 };
 
+// Delete user API
 exports.deleteUsers = async (req, res) => {
   try {
     const userID = req.params.id;
