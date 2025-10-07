@@ -31,5 +31,8 @@ router.delete('/delete-users-prisma/:id', apiControllerPrisma.deleteUsers);
 
 // 4. TypeORM
 router.get('/users-type-orm', apiControllerTypeORM.getAllUsers);
+router.post('/create-users-type-orm', apiControllerTypeORM.createUsers);
+router.patch('/update-users-type-orm/:id', apiControllerTypeORM.updateUsers);
+router.delete('/delete-users-type-orm/:id', apiControllerTypeORM.deleteUsers);
 
 module.exports = router;

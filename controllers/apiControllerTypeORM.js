@@ -1,4 +1,5 @@
 // Importing libraries
+const { where } = require('sequelize');
 const { DataSource, EntitySchema } = require('typeorm');
 
 // Defime modal
@@ -42,6 +43,63 @@ exports.getAllUsers = async (req, res) => {
   try {
     const users = await userRepo.find();
     res.status(200).json({ status: 'success', data: users });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ status: 'error', message: err.message });
+  }
+};
+
+exports.createUsers = async (req, res) => {
+  try {
+    const { id, name, address, contact, occupation } = req.body;
+    const newUsers = await userRepo.create({
+      id,
+      name,
+      address,
+      contact,
+      occupation
+    });
+    const savedUser = await userRepo.save(newUsers);
+    res.status(200).json({ status: 'success', data: savedUser });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ status: 'error', message: err.message });
+  }
+};
+
+exports.updateUsers = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { name, address, contact, occupation } = req.body;
+    const updateUsers = await userRepo.update(
+      userId,
+      {
+        name,
+        address,
+        contact,
+        occupation
+      }
+    );
+    if (updateUsers.affected === 0) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'User not found',
+      });
+    }
+    const updateUser = await userRepo.findOneBy({id: userId});
+    res.status(200).json({ status: 'success', data: updateUser });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ status: 'error', message: err.message });
+  }
+};
+
+exports.deleteUsers = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const deleteUsers = await userRepo.findOneBy({id: userId});
+    const deleteUser = await userRepo.delete(deleteUsers);
+    res.status(200).json({ status: 'success', "message": "deleted" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ status: 'error', message: err.message });
