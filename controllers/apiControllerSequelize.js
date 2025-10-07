@@ -11,8 +11,8 @@ const sequelize = new Sequelize(process.env.PGDATABASE, process.env.PGUSER, proc
 const User = sequelize.define('User', {
   id: {
     type: DataTypes.INTEGER,
-    primaryKey: true
-    // autoIncrement: true
+    primaryKey: true,
+    autoIncrement: true
   },
   name: {
     type: DataTypes.STRING,
@@ -48,12 +48,12 @@ exports.getAllUsers = async (req, res) => {
 
 exports.createUsers = async (req, res) => {
   try {
+    const {name, address, contact, occupation} = req.body;
     const users = await User.create({
-      id: req.body.id,
-      name: req.body.name,
-      address: req.body.address,
-      contact: req.body.contact,
-      occupation: req.body.occupation
+      name,
+      address,
+      contact,
+      occupation
     });
     res.status(200).json({ status: 'success', data: users });
   } catch (err) {

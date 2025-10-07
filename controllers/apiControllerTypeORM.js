@@ -51,9 +51,8 @@ exports.getAllUsers = async (req, res) => {
 
 exports.createUsers = async (req, res) => {
   try {
-    const { id, name, address, contact, occupation } = req.body;
+    const { name, address, contact, occupation } = req.body;
     const newUsers = await userRepo.create({
-      id,
       name,
       address,
       contact,

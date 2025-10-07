@@ -17,11 +17,10 @@ exports.getAllUsers = async (req, res) => {
 
 exports.createUsers = async (req, res) => {
   try {
-    const { id, name, address, contact, occupation } = req.body;
+    const { name, address, contact, occupation } = req.body;
 
     const newUser = await prisma.user.create({
       data: {
-        id,
         name,
         address,
         contact,

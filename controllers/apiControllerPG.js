@@ -19,12 +19,11 @@ exports.getAllUsers = async (req, res) => {
 
 exports.createUser = async (req, res) => {
     const query = `
-        INSERT INTO users (id, name, address, contact, occupation)
-        VALUES ($1, $2, $3, $4, $5)
+        INSERT INTO users (name, address, contact, occupation)
+        VALUES ($1, $2, $3, $4)
         RETURNING *;
     `;
     const values = [
-        req.body.id,
         req.body.name,
         req.body.address,
         req.body.contact,
